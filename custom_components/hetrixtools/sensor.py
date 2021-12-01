@@ -86,4 +86,5 @@ class HetrixToolsMonitorSensor(Entity):
 
     async def async_update(self):
         """Retrieve latest state."""
-        self._state = await self.async_fetch_state()
+        json_response = await self.async_fetch_state()
+        self._state = json_response["Uptime_Status"]
