@@ -9,6 +9,7 @@ import aiohttp
 import async_timeout
 from homeassistant.components.sensor import PLATFORM_SCHEMA
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.typing import (
     ConfigType,
@@ -16,6 +17,8 @@ from homeassistant.helpers.typing import (
     HomeAssistantType,
 )
 import voluptuous as vol
+
+from .const import CONF_API_KEY, CONF_ID, CONF_MONITORS, CONF_NAME, DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -44,7 +47,7 @@ async def async_setup_platform(
     discovery_info: Optional[DiscoveryInfoType] = None,
 ) -> None:
     """Set up the sensor platform."""
-    sensors = [HetrixToolsMonitorSensor(monitor["id"]) for monitor in config[CONF_MONITORS]]
+    sensors = [HetrixToolsMonitorSensor(config[CONF_API_KEY], monitor["_id"]) for monitor in config[CONF_MONITORS]]
     async_add_entities(sensors, update_before_add=True)
 
 class HetrixToolsMonitorSensor(Entity):
@@ -59,7 +62,7 @@ class HetrixToolsMonitorSensor(Entity):
     @property
     def unique_id(self) -> str:
         """Return the unique ID of the sensor."""
-        return self.id_
+        return self._id
 
     @property
     def state(self) -> Optional[str]:
@@ -83,4 +86,4 @@ class HetrixToolsMonitorSensor(Entity):
 
     async def async_update(self):
         """Retrieve latest state."""
-        self._state = await async_fetch_state()
+        self._state = await self.async_fetch_state()
