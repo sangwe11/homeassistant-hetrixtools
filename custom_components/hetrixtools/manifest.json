@@ -1,0 +1,11 @@
+{
+  "codeowners": ["@sangwe11"],
+  "config_flow": false,
+  "dependencies": [],
+  "documentation": "https://github.com/sangwe11/homeassistant-hetrixtools",
+  "domain": "hetrixtools",
+  "iot_class": "cloud_polling",
+  "name": "HetrixTools",
+  "requirements": [],
+  "version": "1.0.0"
+}
